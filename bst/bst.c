@@ -209,9 +209,15 @@ Arvore podarBst(int num, Arvore raiz)
     return NULL;
 }
 
-// TODO
 Arvore reajustaBst(int percent, Arvore raiz)
 {
+    if (raiz != NULL)
+    {
+        raiz->valor = raiz->valor + raiz->valor * percent / 100;
+        raiz->dir = reajustaBst(percent, raiz->dir);
+        raiz->esq = reajustaBst(percent, raiz->esq);
+        return raiz;
+    }
     return NULL;
 }
 
