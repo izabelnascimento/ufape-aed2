@@ -5,11 +5,12 @@
 int main(int argc, char *argv[])
 {
     // declarar uma árvore
-    Arvore arvore;
+    Arvore arvore, auxArvore;
     int opcao, aux, qtd, num;
 
     // inicializar a árvore como uma árvore vazia
     arvore = NULL;
+    auxArvore = NULL;
 
     while (1)
     {
@@ -50,7 +51,6 @@ int main(int argc, char *argv[])
             printf("\n");
             break;
         case 9:
-            // TODO
             scanf("%d\n", &num);
             arvore = removerBst(num, arvore);
             break;
@@ -59,7 +59,6 @@ int main(int argc, char *argv[])
             printf("%d\n", num);
             break;
         case 11:
-            // TODO
             scanf("%d", &num);
             arvore = podarBst(num, arvore);
             break;
@@ -78,6 +77,13 @@ int main(int argc, char *argv[])
             break;
         case 15:
             printf("%d\n", alturaBst(arvore));
+            break;
+        case 98:
+            auxArvore = maiorBst(arvore);
+            if (auxArvore != NULL)
+                printf("%d\n", auxArvore->valor);
+            else
+                printf("-1\n");
             break;
         case 99:
             exit(0);

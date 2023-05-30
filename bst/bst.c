@@ -185,10 +185,57 @@ void caminhoBst(int num, Arvore raiz)
         printf("-1");
     }
 }
-// TODO
-Arvore removerBst(int num, Arvore raiz)
+
+Arvore maiorBst(Arvore raiz)
 {
-    return NULL;
+    if (raiz == NULL)
+        return NULL;
+    if (raiz->dir == NULL)
+        return raiz;
+    else
+        return maiorBst(raiz->dir);
+}
+
+Arvore removerBst(int valor, Arvore raiz)
+{
+    // caso arvore vazia
+    if (raiz != NULL)
+    {
+        // encontrou o elemento
+        if (valor == raiz->valor)
+        {
+            // verificar 0, 1esq, 1dir ou 2 filhos
+            // caso 0
+            if (raiz->esq == NULL && raiz->dir == NULL)
+            {
+                free(raiz);
+                return NULL;
+            }
+            // caso 1esq
+            if (raiz->esq != NULL && raiz->dir == NULL)
+            {
+                Arvore aux = raiz->esq;
+                free(raiz);
+                return aux;
+            }
+            // caso 1dir
+            if (raiz->dir != NULL && raiz->esq == NULL)
+            {
+                Arvore aux = raiz->dir;
+                free(raiz);
+                return aux;
+            }
+            // caso 2
+            int maiorValorEsq = maiorBst(raiz->esq)->valor;
+            raiz->valor = maiorValorEsq;
+            raiz->esq = removerBst(maiorValorEsq, raiz->esq);
+        }
+        if (valor > raiz->valor)
+            raiz->dir = removerBst(valor, raiz->dir);
+        else
+            raiz->esq = removerBst(valor, raiz->esq);
+    }
+    return raiz;
 }
 
 int somatorioBst(Arvore raiz)
@@ -203,10 +250,40 @@ int somatorioBst(Arvore raiz)
     return soma;
 }
 
-// TODO
-Arvore podarBst(int num, Arvore raiz)
+Arvore freeBst(Arvore raiz)
 {
-    return NULL;
+    if (raiz != NULL)
+    {
+        if (raiz->dir == NULL && raiz->esq == NULL)
+        {
+            free(raiz);
+            return NULL;
+        }
+        if (raiz->dir != NULL || raiz->esq != NULL)
+        {
+            raiz->esq = freeBst(raiz->esq);
+            raiz->dir = freeBst(raiz->dir);
+        }
+        free(raiz);
+    }
+    return raiz;
+}
+
+Arvore podarBst(int valor, Arvore raiz)
+{
+    if (raiz != NULL)
+    {
+        if (valor == raiz->valor)
+        {
+            freeBst(raiz);
+            return NULL;
+        }
+        else if (valor > raiz->valor)
+            raiz->dir = podarBst(valor, raiz->dir);
+        else
+            raiz->esq = podarBst(valor, raiz->esq);
+    }
+    return raiz;
 }
 
 Arvore reajustaBst(int percent, Arvore raiz)

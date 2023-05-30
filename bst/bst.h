@@ -18,16 +18,14 @@ int qtdPrimoBst(Arvore raiz);
 void sucessorBst(int num, Arvore raiz);
 void sucessorRecBst(int num, Arvore raiz, int ultimo);
 void caminhoBst(int n, Arvore raiz);
-// TODO
 Arvore removerBst(int num, Arvore raiz);
 int somatorioBst(Arvore raiz);
-// TODO
 Arvore podarBst(int num, Arvore raiz);
-// TODO
 Arvore reajustaBst(int percent, Arvore raiz);
 int exiteBst(int chave, Arvore raiz);
 void descendentesBst(int num, Arvore raiz);
 int alturaBst(Arvore raiz);
 int alturaRecBst(Arvore raiz);
+Arvore maiorBst(Arvore raiz);
 
 #endif
