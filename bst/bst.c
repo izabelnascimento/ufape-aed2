@@ -4,27 +4,20 @@
 
 Arvore inserirBst(int valor, Arvore raiz)
 {
-    // caso base - inserir em uma árvore vazia
     if (raiz == NULL)
     {
         Arvore novo = (Arvore)malloc(sizeof(struct no));
         novo->esq = NULL;
         novo->dir = NULL;
         novo->valor = valor;
-        // o retorno é a raiz da sub-árvore unitária que foi iniciada
         return novo;
     }
-    // caso recursivo/indutivo
     else
     {
         if (valor > raiz->valor)
-        {
             raiz->dir = inserirBst(valor, raiz->dir);
-        }
         else
-        {
             raiz->esq = inserirBst(valor, raiz->esq);
-        }
         return raiz;
     }
 }
@@ -33,14 +26,10 @@ void preOrderBst(Arvore raiz)
 {
     if (raiz != NULL)
     {
-        // processar a raiz relativa
         printf("[%d]", raiz->valor);
-
-        // encadeamentos recursivos esq, dir
         preOrderBst(raiz->esq);
         preOrderBst(raiz->dir);
-
-    } // else caso base implícito não faz nada
+    }
 }
 
 void inOrderBst(Arvore raiz)
@@ -81,15 +70,10 @@ int qtdPrimoBst(Arvore raiz)
         for (i = 2; i < raiz->valor; i++)
         {
             if (raiz->valor % i == 0)
-            {
                 primo = 0;
-            }
         }
         if (primo == 1)
-        {
             qtd++;
-        }
-
         qtd = qtd + qtdPrimoBst(raiz->dir);
         qtd = qtd + qtdPrimoBst(raiz->esq);
     }
@@ -102,24 +86,19 @@ int buscarMenorBst(Arvore raiz)
     {
         int menor = buscarMenorBst(raiz->esq);
         if (menor == -1)
-        {
             return raiz->valor;
-        }
         else
-        {
             return menor;
-        }
     }
     else
-    {
         return -1;
-    }
 }
 
 void sucessorBst(int num, Arvore raiz)
 {
     sucessorRecBst(num, raiz, num);
 }
+
 void sucessorRecBst(int num, Arvore raiz, int ultimo)
 {
     if (raiz != NULL)
@@ -131,18 +110,12 @@ void sucessorRecBst(int num, Arvore raiz, int ultimo)
             if (suc == -1)
             {
                 if (ultimo <= num)
-                {
                     printf("-1\n");
-                }
                 else
-                {
                     printf("%d\n", ultimo);
-                }
             }
             else
-            {
                 printf("%d\n", suc);
-            }
         }
         else if (num < raiz->valor)
         {
@@ -156,9 +129,7 @@ void sucessorRecBst(int num, Arvore raiz, int ultimo)
         }
     }
     else
-    {
         printf("-1\n");
-    }
 }
 
 void caminhoBst(int num, Arvore raiz)
@@ -198,34 +169,27 @@ Arvore maiorBst(Arvore raiz)
 
 Arvore removerBst(int valor, Arvore raiz)
 {
-    // caso arvore vazia
     if (raiz != NULL)
     {
-        // encontrou o elemento
         if (valor == raiz->valor)
         {
-            // verificar 0, 1esq, 1dir ou 2 filhos
-            // caso 0
             if (raiz->esq == NULL && raiz->dir == NULL)
             {
                 free(raiz);
                 return NULL;
             }
-            // caso 1esq
             if (raiz->esq != NULL && raiz->dir == NULL)
             {
                 Arvore aux = raiz->esq;
                 free(raiz);
                 return aux;
             }
-            // caso 1dir
             if (raiz->dir != NULL && raiz->esq == NULL)
             {
                 Arvore aux = raiz->dir;
                 free(raiz);
                 return aux;
             }
-            // caso 2
             int maiorValorEsq = maiorBst(raiz->esq)->valor;
             raiz->valor = maiorValorEsq;
             raiz->esq = removerBst(maiorValorEsq, raiz->esq);

@@ -4,11 +4,9 @@
 
 int main(int argc, char *argv[])
 {
-    // declarar uma árvore
     Arvore arvore, auxArvore;
     int opcao, aux, qtd, num;
 
-    // inicializar a árvore como uma árvore vazia
     arvore = NULL;
     auxArvore = NULL;
 
