@@ -34,7 +34,8 @@ Arvore inserirAvl(int valor, Arvore raiz, int *cresceu)
                     return raiz;
                     break;
                 case 1:
-                    // isso ocorreu raiz->fb = 2;
+                    // isso ocorreu
+                    raiz->fb = 2;
                     *cresceu = 0;
                     return rotacao(raiz);
                     break;
@@ -57,6 +58,11 @@ Arvore inserirAvl(int valor, Arvore raiz, int *cresceu)
             case 0:
                 raiz->fb = -1;
                 *cresceu = 1;
+                return raiz;
+                break;
+            case 1:
+                raiz->fb = 0;
+                *cresceu = 0;
                 return raiz;
                 break;
             default:
@@ -84,7 +90,7 @@ Arvore rotacao(Arvore pivo)
     else
     {
         // caso -2
-        if (pivo->esq->fb < 0)
+        if (pivo->esq->fb <= 0)
         {
             return rotacaoSimplesDir(pivo);
         }
@@ -215,6 +221,106 @@ Arvore rotacaoSimplesEsq(Arvore pivo)
     return u;
 }
 
+Arvore removerAvl(int valor, Arvore raiz, int *diminuiu)
+{
+    if (raiz != NULL)
+    {
+        if (valor == raiz->valor)
+        {
+            if (raiz->esq != NULL && raiz->dir != NULL)
+            {
+                // procurar o maior elemento da sub-arvore a esquerda
+                Arvore maior = maiorAvl(raiz->esq);
+                raiz->valor = maior->valor;
+                // atribuir esse valor ao dado da raiz relativa
+                raiz->esq = removerAvl(maior->valor, raiz->esq, diminuiu);
+                if (*diminuiu)
+                {
+                    switch (raiz->fb)
+                    {
+                    case -1:
+                        raiz->fb = 0;
+                        *diminuiu;
+                        break;
+                    case 0:
+                        raiz->fb = 1;
+                        *diminuiu = 0;
+                        break;
+                    case 1:
+                        raiz->fb++;
+                        return rotacao(raiz);
+                    default:
+                        break;
+                    }
+                }
+                return raiz;
+            }
+            if (raiz->esq == NULL)
+            {
+                *diminuiu = 1;
+                return raiz->dir;
+            }
+            if (raiz->dir == NULL)
+            {
+                return raiz->esq;
+            }
+            raiz->valor = maiorAvl(raiz->esq)->valor;
+            raiz->esq = removerAvl(raiz->valor, raiz->esq, diminuiu);
+            return raiz;
+        }
+        if (valor > raiz->valor)
+        {
+            raiz->dir = removerAvl(valor, raiz->dir, diminuiu);
+            // verifica se a árvore diminuiu e ajusta os fatores de balanço
+            if (*diminuiu)
+            {
+                switch (raiz->fb)
+                {
+                case -1:
+                    raiz->fb--;
+                    return rotacao(raiz);
+                case 0:
+                    raiz->fb = -1;
+                    *diminuiu = 0;
+                case +1:
+                    raiz->fb = 0;
+                    *diminuiu = 1;
+                }
+            }
+        }
+        else
+        {
+            raiz->esq = removerAvl(valor, raiz->esq, diminuiu);
+            if (*diminuiu)
+            {
+                switch (raiz->fb)
+                {
+                case -1:
+                    raiz->fb = 0;
+                    *diminuiu = 1;
+                case 0:
+                    raiz->fb = -1;
+                    *diminuiu = 0;
+                case +1:
+                    raiz->fb = 0;
+                    *diminuiu = 1;
+                }
+            }
+        }
+    }
+    return raiz;
+}
+
+Arvore maiorAvl(Arvore raiz)
+{
+    if (raiz == NULL)
+        return NULL;
+    if (raiz->dir == NULL)
+        return raiz;
+    else
+        return maiorAvl(raiz->dir);
+}
+
 void preOrderAvl(Arvore raiz)
 {
     if (raiz != NULL)
@@ -225,22 +331,22 @@ void preOrderAvl(Arvore raiz)
     }
 }
 
-void inOrderBst(Arvore raiz)
+void inOrderAvl(Arvore raiz)
 {
     if (raiz != NULL)
     {
-        inOrderBst(raiz->esq);
+        inOrderAvl(raiz->esq);
         printf("[%d]", raiz->valor);
-        inOrderBst(raiz->dir);
+        inOrderAvl(raiz->dir);
     }
 }
 
-void posOrderBst(Arvore raiz)
+void posOrderAvl(Arvore raiz)
 {
     if (raiz != NULL)
     {
-        posOrderBst(raiz->esq);
-        posOrderBst(raiz->dir);
+        posOrderAvl(raiz->esq);
+        posOrderAvl(raiz->dir);
         printf("[%d]", raiz->valor);
     }
 }

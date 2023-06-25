@@ -16,9 +16,11 @@ Arvore rotacaoSimplesDir(Arvore pivo);
 Arvore rotacaoSimplesEsq(Arvore pivo);
 Arvore rotacaoDuplaEsq(Arvore pivo);
 Arvore rotacaoDuplaDir(Arvore pivo);
+Arvore removerAvl(int num, Arvore raiz, int *diminuiu);
+Arvore maiorAvl(Arvore raiz);
 void preOrderAvl(Arvore raiz);
 
-void inOrderBst(Arvore raiz);
-void posOrderBst(Arvore raiz);
+void inOrderAvl(Arvore raiz);
+void posOrderAvl(Arvore raiz);
 
 #endif
