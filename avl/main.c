@@ -20,12 +20,12 @@ int main(int argc, char *argv[])
             arvore = inserirAvl(aux, arvore, &fb);
             break;
         case 2:
-            scanf("%d", &num);
-            arvore = removerAvl(num, arvore, &diminuiu);
-            break;
-        case 3:
             preOrderAvl(arvore);
             printf("\n");
+            break;
+        case 3:
+            scanf("%d", &num);
+            arvore = removerAvl(num, arvore, &diminuiu);
             break;
         case 4:
             inOrderAvl(arvore);

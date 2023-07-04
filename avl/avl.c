@@ -325,7 +325,7 @@ void preOrderAvl(Arvore raiz)
 {
     if (raiz != NULL)
     {
-        printf("%d[%d] ", raiz->valor, raiz->fb);
+        printf("[%d %d] ", raiz->valor, raiz->fb);
         preOrderAvl(raiz->esq);
         preOrderAvl(raiz->dir);
     }
