@@ -52,8 +52,17 @@ void ajustar(Arvore *raiz, Arvore elemento)
 {
     while (cor(elemento->pai) == VERMELHO && cor(elemento) == VERMELHO)
     {
-        /* code */
+        // caso 1
+        if (cor(tio(elemento)) == VERMELHO)
+        {
+            elemento->pai->cor = PRETO;
+            tio(elemento)->cor = PRETO;
+            elemento->pai->pai->cor = VERMELHO;
+            elemento = elemento->pai->pai;
+            continue;
+        }
     }
+    // caso 0
     (*raiz)->cor = PRETO;
 }
 
@@ -68,6 +77,24 @@ enum Cor cor(Arvore elemento)
         return PRETO;
     else
         return elemento->cor;
+}
+
+Arvore tio(Arvore elemento)
+{
+    return irmao(elemento->pai);
+}
+
+Arvore irmao(Arvore elemento)
+{
+    if (filhoEsquerdo(elemento))
+        return elemento->pai->dir;
+    else
+        return elemento->pai->esq;
+}
+
+int filhoEsquerdo(Arvore elemento)
+{
+    return (elemento->pai != NULL && elemento == elemento->pai->esq);
 }
 
 const char *cores[] = {

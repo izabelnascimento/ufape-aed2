@@ -23,6 +23,9 @@ Arvore inserirRb(int valor, Arvore *raiz);
 void ajustar(Arvore *raiz, Arvore elemento);
 int elementoRaiz(Arvore elemento);
 enum Cor cor(Arvore elemento);
+Arvore tio(Arvore elemento);
+Arvore irmao(Arvore elemento);
+int filhoEsquerdo(Arvore elemento);
 
 void preOrderRb(Arvore raiz);
 
