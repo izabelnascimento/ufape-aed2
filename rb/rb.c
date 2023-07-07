@@ -35,7 +35,7 @@ Arvore inserirRb(int valor, Arvore *raiz)
     novo->pai = pai;
     novo->cor = VERMELHO;
 
-    if (elementoRaiz(novo))
+    if (isElementoRaiz(novo))
         *raiz = novo;
     else
     {
@@ -61,12 +61,181 @@ void ajustar(Arvore *raiz, Arvore elemento)
             elemento = elemento->pai->pai;
             continue;
         }
+        // caso 2a: rotação simples direita
+        if (isFilhoEsquerdo(elemento) && isFilhoEsquerdo(elemento->pai))
+        {
+            rotacaoSimplesDir(raiz, elemento->pai->pai);
+            elemento->pai->cor = PRETO;
+            irmao(elemento)->cor = VERMELHO;
+            continue;
+        }
+        // caso 2b: rotação simples esquerda
+        if (isFilhoDireito(elemento) && isFilhoDireito(elemento->pai))
+        {
+            rotacaoSimplesEsq(raiz, elemento->pai->pai);
+            elemento->pai->cor = PRETO;
+            irmao(elemento)->cor = VERMELHO;
+            continue;
+        }
+        // caso 3: rotação dupla
+        if (cor(tio(elemento)) == PRETO)
+        {
+            // caso 3a: rotação dupla direita
+            if (isFilhoDireito(elemento) && isFilhoEsquerdo(elemento->pai))
+            {
+                rotacaoSimplesEsq(raiz, elemento->pai);
+                rotacaoSimplesDir(raiz, elemento->pai);
+                elemento->cor = PRETO;
+                elemento->esq->cor = VERMELHO;
+                elemento->dir->cor = VERMELHO;
+            }
+            // caso 3b: rotação dupla esquerda
+            if (isFilhoEsquerdo(elemento) && isFilhoDireito(elemento->pai))
+            {
+                rotacaoSimplesDir(raiz, elemento->pai);
+                rotacaoSimplesEsq(raiz, elemento->pai);
+                elemento->cor = PRETO;
+                elemento->esq->cor = VERMELHO;
+                elemento->dir->cor = VERMELHO;
+            }
+        }
     }
     // caso 0
     (*raiz)->cor = PRETO;
 }
 
-int elementoRaiz(Arvore elemento)
+void rotacaoSimplesDir(Arvore *raiz, Arvore pivo)
+{
+    Arvore u, t1, t2, t3;
+    u = pivo->esq;
+    t1 = u->esq;
+    t2 = u->dir;
+    t3 = pivo->dir;
+
+    int pivoEsq = isFilhoEsquerdo(pivo);
+
+    pivo->esq = t2;
+    if (t2 != NULL)
+        t2->pai = pivo;
+
+    u->dir = pivo;
+    u->pai = pivo->pai;
+    pivo->pai = u;
+
+    if (isElementoRaiz(u))
+        *raiz = u;
+    else
+    {
+        if (pivoEsq)
+            u->pai->esq = u;
+        else
+            u->pai->dir = u;
+    }
+}
+
+void rotacaoSimplesEsq(Arvore *raiz, Arvore pivo)
+{
+    Arvore u, t1, t2, t3;
+    u = pivo->dir;
+    t1 = pivo->esq;
+    t2 = u->esq;
+    t3 = u->dir;
+
+    int pivoDir = isFilhoDireito(pivo);
+
+    pivo->dir = t2;
+    if (t2 != NULL)
+        t2->pai = pivo;
+
+    u->esq = pivo;
+    u->pai = pivo->pai;
+    pivo->pai = u;
+
+    if (isElementoRaiz(u))
+        *raiz = u;
+    else
+    {
+        if (pivoDir)
+            u->pai->dir = u;
+        else
+            u->pai->esq = u;
+    }
+}
+
+// void rotacaoDuplaDir(Arvore *raiz, Arvore pivo)
+// {
+//     Arvore u, v, t1, t2, t3, t4;
+//     u = pivo->esq;
+//     v = u->dir;
+//     t1 = u->esq;
+//     t2 = v->esq;
+//     t3 = v->dir;
+//     t4 = pivo->dir;
+
+//     int pivoEsq = isFilhoEsquerdo(pivo);
+
+//     u->dir = t2;
+//     if (t2 != NULL)
+//         t2->pai = u;
+//     v->esq = u;
+//     v->pai = pivo;
+//     u->pai = v;
+
+//     pivo->esq = t3;
+//     if (t3 != NULL)
+//         t3->pai = pivo;
+//     v->pai = pivo->pai;
+//     pivo->pai = v;
+//     v->dir = pivo;
+
+//     if (isElementoRaiz(v))
+//         *raiz = v;
+//     else
+//     {
+//         if (pivoEsq)
+//             v->pai->dir = v;
+//         else
+//             v->pai->esq = v;
+//     }
+// }
+
+// Arvore rotacaoDuplaEsq(Arvore pivo)
+// {
+//     Arvore u, v, t1, t2, t3, t4;
+//     u = pivo->dir;
+//     v = u->esq;
+//     t1 = pivo->esq;
+//     t2 = v->esq;
+//     t3 = v->dir;
+//     t4 = u->dir;
+
+//     switch (v->fb)
+//     {
+//     case -1:
+//         pivo->fb = 0;
+//         u->fb = 1;
+//         break;
+//     case 0:
+//         pivo->fb = 0;
+//         u->fb = 0;
+//         break;
+//     case 1:
+//         pivo->fb = -1;
+//         u->fb = 0;
+//         break;
+//     default:
+//         break;
+//     }
+//     v->fb = 0;
+
+//     u->esq = t3;
+//     v->dir = u;
+//     pivo->dir = t2;
+//     v->esq = pivo;
+//     return v;
+// }
+
+int isElementoRaiz(Arvore elemento)
 {
     return (elemento->pai == NULL);
 }
@@ -86,15 +255,20 @@ Arvore tio(Arvore elemento)
 
 Arvore irmao(Arvore elemento)
 {
-    if (filhoEsquerdo(elemento))
+    if (isFilhoEsquerdo(elemento))
         return elemento->pai->dir;
     else
         return elemento->pai->esq;
 }
 
-int filhoEsquerdo(Arvore elemento)
+int isFilhoEsquerdo(Arvore elemento)
 {
     return (elemento->pai != NULL && elemento == elemento->pai->esq);
+}
+
+int isFilhoDireito(Arvore elemento)
+{
+    return (elemento->pai != NULL && elemento == elemento->pai->dir);
 }
 
 const char *cores[] = {

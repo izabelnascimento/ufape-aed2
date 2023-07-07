@@ -21,11 +21,16 @@ void inicializar(Arvore *raiz);
 
 Arvore inserirRb(int valor, Arvore *raiz);
 void ajustar(Arvore *raiz, Arvore elemento);
-int elementoRaiz(Arvore elemento);
+
+void rotacaoSimplesDir(Arvore *raiz, Arvore pivo);
+void rotacaoSimplesEsq(Arvore *raiz, Arvore pivo);
+
+int isElementoRaiz(Arvore elemento);
 enum Cor cor(Arvore elemento);
 Arvore tio(Arvore elemento);
 Arvore irmao(Arvore elemento);
-int filhoEsquerdo(Arvore elemento);
+int isFilhoEsquerdo(Arvore elemento);
+int isFilhoDireito(Arvore elemento);
 
 void preOrderRb(Arvore raiz);
 
