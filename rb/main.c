@@ -4,11 +4,10 @@
 
 int main(int argc, char *argv[])
 {
-    Arvore arvore, auxArvore;
-    int opcao, aux, qtd, num;
+    Arvore arvore;
+    int opcao, aux, num;
 
-    arvore = NULL;
-    auxArvore = NULL;
+    inicializar(&arvore);
 
     while (1)
     {
@@ -26,6 +25,9 @@ int main(int argc, char *argv[])
         case 3:
             scanf("%d\n", &num);
             removerRb(num, &arvore);
+            break;
+        case 4:
+            printf("------------------------------------------------------------------------------------------------\n");
             break;
         case 99:
             exit(0);

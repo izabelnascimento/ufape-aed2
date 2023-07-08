@@ -252,6 +252,7 @@ void removerRb(int valor, Arvore *raiz)
                     else
                         posicao->pai->dir = noNull;
                     free(posicao);
+
                     reajustar(raiz, noNull);
                     break;
                 }
@@ -268,9 +269,9 @@ void removerRb(int valor, Arvore *raiz)
                 else
                 {
                     if (isFilhoDireito(posicao))
-                        posicao->pai->esq = posicao->dir;
+                        posicao->pai->dir = posicao->esq;
                     else
-                        posicao->pai->dir = posicao->dir;
+                        posicao->pai->esq = posicao->esq;
                 }
                 free(posicao);
                 break;
@@ -306,7 +307,112 @@ void removerRb(int valor, Arvore *raiz)
     }
 }
 
-void reajustar(Arvore *raiz, Arvore elemento) {}
+void reajustar(Arvore *raiz, Arvore elemento)
+{
+    // caso 1
+    if (isElementoRaiz(elemento))
+    {
+        elemento->cor = PRETO;
+        if (elemento == noNull)
+            *raiz = NULL;
+        return;
+    }
+    // caso 2
+    if (cor(elemento->pai) == PRETO && cor(irmao(elemento)) == VERMELHO && cor(irmao(elemento)->dir) == PRETO && cor(irmao(elemento)->esq) == PRETO)
+    {
+        if (isFilhoEsquerdo(elemento))
+            rotacaoSimplesEsq(raiz, elemento->pai);
+        else
+            rotacaoSimplesDir(raiz, elemento->pai);
+
+        elemento->pai->pai->cor = PRETO;
+        elemento->pai->cor = VERMELHO;
+
+        reajustar(raiz, elemento);
+        return;
+    }
+    // caso 3
+    if (cor(elemento->pai) == PRETO && cor(irmao(elemento)) == PRETO && cor(irmao(elemento)->dir) == PRETO && cor(irmao(elemento)->esq) == PRETO)
+    {
+        elemento->pai->cor = DUPLO_PRETO;
+        irmao(elemento)->cor = VERMELHO;
+        if (isFilhoDireito(elemento))
+            elemento->pai->dir = NULL;
+        else
+            elemento->pai->esq = NULL;
+
+        // free(elemento);
+        reajustar(raiz, elemento->pai);
+        return;
+    }
+
+    // caso 4
+    if (cor(elemento->pai) == VERMELHO && cor(irmao(elemento)) == PRETO && cor(irmao(elemento)->dir) == PRETO && cor(irmao(elemento)->esq) == PRETO)
+    {
+        irmao(elemento)->cor = VERMELHO;
+        elemento->pai->cor = PRETO;
+        if (isFilhoDireito(elemento))
+            elemento->pai->dir = NULL;
+        else
+            elemento->pai->esq = NULL;
+        // free(elemento);
+        return;
+    }
+    // caso 5a
+    if (isFilhoEsquerdo(elemento) && cor(irmao(elemento)) == PRETO && cor(irmao(elemento)->esq) == VERMELHO && cor(irmao(elemento)->dir) == PRETO)
+    {
+        rotacaoSimplesDir(raiz, irmao(elemento));
+        irmao(elemento)->cor = PRETO;
+        irmao(elemento)->dir->cor = VERMELHO;
+
+        reajustar(raiz, elemento);
+        return;
+    }
+    // caso 5b
+    if (isFilhoDireito(elemento) && cor(irmao(elemento)) == PRETO && cor(irmao(elemento)->dir) == VERMELHO && cor(irmao(elemento)->esq) == PRETO)
+    {
+        rotacaoSimplesEsq(raiz, irmao(elemento));
+        irmao(elemento)->cor = PRETO;
+        irmao(elemento)->esq->cor = VERMELHO;
+
+        reajustar(raiz, elemento);
+        return;
+    }
+    // caso 6a
+    if (cor(irmao(elemento)) == PRETO && cor(irmao(elemento)->dir) == VERMELHO)
+    {
+        rotacaoSimplesEsq(raiz, elemento->pai);
+        elemento->pai->pai->cor = elemento->pai->cor;
+        elemento->pai->cor = PRETO;
+        tio(elemento)->cor = PRETO;
+        elemento->pai->esq = NULL;
+        // free(elemento);
+        return;
+    }
+    // caso 6b
+    if (cor(irmao(elemento)) == PRETO && cor(irmao(elemento)->esq) == VERMELHO)
+    {
+        rotacaoSimplesDir(raiz, elemento->pai);
+        elemento->pai->pai->cor = elemento->pai->cor;
+        elemento->pai->cor = PRETO;
+        tio(elemento)->cor = PRETO;
+        // elemento->pai->dir = NULL;
+        retirDuploPreto(raiz, elemento);
+        // free(elemento);
+        return;
+    }
+}
+
+void retirDuploPreto(Arvore *raiz, Arvore elemento)
+{
+    if (elemento == noNull)
+        if (isFilhoEsquerdo(elemento))
+            elemento->pai->esq = NULL;
+        else
+            elemento->pai->dir = NULL;
+    else
+        elemento->cor = PRETO;
+}
 
 Arvore maiorElemento(Arvore raiz)
 {
