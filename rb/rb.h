@@ -34,6 +34,8 @@ int isFilhoDireito(Arvore elemento);
 
 void preOrderRb(Arvore raiz);
 
-// Arvore removerRb(int num, Arvore raiz);
+void removerRb(int valor, Arvore *raiz);
+void reajustar(Arvore *raiz, Arvore elemento);
+Arvore maiorElemento(Arvore raiz);
 
 #endif

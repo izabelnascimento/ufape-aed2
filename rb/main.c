@@ -24,8 +24,8 @@ int main(int argc, char *argv[])
             printf("\n");
             break;
         case 3:
-            // scanf("%d\n", &num);
-            // arvore = removerRb(num, arvore);
+            scanf("%d\n", &num);
+            removerRb(num, &arvore);
             break;
         case 99:
             exit(0);

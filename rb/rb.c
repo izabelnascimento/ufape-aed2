@@ -213,37 +213,107 @@ void preOrderRb(Arvore raiz)
     }
 }
 
-// Arvore removerBst(int valor, Arvore raiz)
-// {
-//     if (raiz != NULL)
-//     {
-//         if (valor == raiz->valor)
-//         {
-//             if (raiz->esq == NULL && raiz->dir == NULL)
-//             {
-//                 free(raiz);
-//                 return NULL;
-//             }
-//             if (raiz->esq != NULL && raiz->dir == NULL)
-//             {
-//                 Arvore aux = raiz->esq;
-//                 free(raiz);
-//                 return aux;
-//             }
-//             if (raiz->dir != NULL && raiz->esq == NULL)
-//             {
-//                 Arvore aux = raiz->dir;
-//                 free(raiz);
-//                 return aux;
-//             }
-//             int maiorValorEsq = maiorBst(raiz->esq)->valor;
-//             raiz->valor = maiorValorEsq;
-//             raiz->esq = removerBst(maiorValorEsq, raiz->esq);
-//         }
-//         if (valor > raiz->valor)
-//             raiz->dir = removerBst(valor, raiz->dir);
-//         else
-//             raiz->esq = removerBst(valor, raiz->esq);
-//     }
-//     return raiz;
-// }
+void removerRb(int valor, Arvore *raiz)
+{
+    Arvore posicao;
+    posicao = *raiz;
+
+    while (posicao != NULL)
+    {
+        if (valor == posicao->valor)
+        {
+            // 0 filho
+            if (posicao->esq == NULL && posicao->dir == NULL)
+            {
+                // raiz 0 filho
+                if (isElementoRaiz(posicao))
+                {
+                    *raiz = NULL;
+                    free(posicao);
+                    break;
+                }
+                // vermelho 0 filho
+                if (posicao->cor == VERMELHO)
+                {
+                    if (isFilhoEsquerdo(posicao))
+                        posicao->pai->esq = NULL;
+                    else
+                        posicao->pai->dir = NULL;
+                    free(posicao);
+                    break;
+                }
+                // preto 0 filho
+                else
+                {
+                    noNull->cor = DUPLO_PRETO;
+                    noNull->pai = posicao->pai;
+                    if (isFilhoEsquerdo(posicao))
+                        posicao->pai->esq = noNull;
+                    else
+                        posicao->pai->dir = noNull;
+                    free(posicao);
+                    reajustar(raiz, noNull);
+                    break;
+                }
+                break;
+            }
+            // 1 filho esq
+            if (posicao->esq != NULL && posicao->dir == NULL)
+            {
+                posicao->esq->cor = PRETO;
+                posicao->esq->pai = posicao->pai;
+
+                if (isElementoRaiz(posicao))
+                    *raiz = posicao->esq;
+                else
+                {
+                    if (isFilhoDireito(posicao))
+                        posicao->pai->esq = posicao->dir;
+                    else
+                        posicao->pai->dir = posicao->dir;
+                }
+                free(posicao);
+                break;
+            }
+            // 1 filho dir
+            if (posicao->dir != NULL && posicao->esq == NULL)
+            {
+                posicao->dir->cor = PRETO;
+                posicao->dir->pai = posicao->pai;
+
+                if (isElementoRaiz(posicao))
+                    *raiz = posicao->dir;
+                else
+                {
+                    if (isFilhoEsquerdo(posicao))
+                        posicao->pai->esq = posicao->dir;
+                    else
+                        posicao->pai->dir = posicao->dir;
+                }
+                free(posicao);
+                break;
+            }
+            // caso 2 filhos
+            int maiorValorEsq = maiorElemento(posicao->esq)->valor;
+            posicao->valor = maiorValorEsq;
+            removerRb(posicao->valor, &(posicao->esq));
+            break;
+        }
+        if (valor > posicao->valor)
+            posicao = posicao->dir;
+        else
+            posicao = posicao->esq;
+    }
+}
+
+void reajustar(Arvore *raiz, Arvore elemento) {}
+
+Arvore maiorElemento(Arvore raiz)
+{
+    if (raiz == NULL)
+        return NULL;
+    if (raiz->dir == NULL)
+        return raiz;
+    else
+        return maiorElemento(raiz->dir);
+}
