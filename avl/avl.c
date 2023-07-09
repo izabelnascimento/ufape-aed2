@@ -336,7 +336,7 @@ void inOrderAvl(Arvore raiz)
     if (raiz != NULL)
     {
         inOrderAvl(raiz->esq);
-        printf("[%d]", raiz->valor);
+        printf("[%d %d]", raiz->valor, raiz->fb);
         inOrderAvl(raiz->dir);
     }
 }
@@ -347,6 +347,6 @@ void posOrderAvl(Arvore raiz)
     {
         posOrderAvl(raiz->esq);
         posOrderAvl(raiz->dir);
-        printf("[%d]", raiz->valor);
+        printf("[%d %d]", raiz->valor, raiz->fb);
     }
 }
