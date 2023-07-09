@@ -37,6 +37,6 @@ void preOrderRb(Arvore raiz);
 void removerRb(int valor, Arvore *raiz);
 void reajustar(Arvore *raiz, Arvore elemento);
 Arvore maiorElemento(Arvore raiz);
-void retirDuploPreto(Arvore *raiz, Arvore elemento);
+void retirarDuploPreto(Arvore *raiz, Arvore elemento);
 
 #endif

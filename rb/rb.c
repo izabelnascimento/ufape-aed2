@@ -336,12 +336,7 @@ void reajustar(Arvore *raiz, Arvore elemento)
     {
         elemento->pai->cor = DUPLO_PRETO;
         irmao(elemento)->cor = VERMELHO;
-        if (isFilhoDireito(elemento))
-            elemento->pai->dir = NULL;
-        else
-            elemento->pai->esq = NULL;
-
-        // free(elemento);
+        retirarDuploPreto(raiz, elemento);
         reajustar(raiz, elemento->pai);
         return;
     }
@@ -351,11 +346,7 @@ void reajustar(Arvore *raiz, Arvore elemento)
     {
         irmao(elemento)->cor = VERMELHO;
         elemento->pai->cor = PRETO;
-        if (isFilhoDireito(elemento))
-            elemento->pai->dir = NULL;
-        else
-            elemento->pai->esq = NULL;
-        // free(elemento);
+        retirarDuploPreto(raiz, elemento);
         return;
     }
     // caso 5a
@@ -385,8 +376,7 @@ void reajustar(Arvore *raiz, Arvore elemento)
         elemento->pai->pai->cor = elemento->pai->cor;
         elemento->pai->cor = PRETO;
         tio(elemento)->cor = PRETO;
-        elemento->pai->esq = NULL;
-        // free(elemento);
+        retirarDuploPreto(raiz, elemento);
         return;
     }
     // caso 6b
@@ -396,14 +386,12 @@ void reajustar(Arvore *raiz, Arvore elemento)
         elemento->pai->pai->cor = elemento->pai->cor;
         elemento->pai->cor = PRETO;
         tio(elemento)->cor = PRETO;
-        // elemento->pai->dir = NULL;
-        retirDuploPreto(raiz, elemento);
-        // free(elemento);
+        retirarDuploPreto(raiz, elemento);
         return;
     }
 }
 
-void retirDuploPreto(Arvore *raiz, Arvore elemento)
+void retirarDuploPreto(Arvore *raiz, Arvore elemento)
 {
     if (elemento == noNull)
         if (isFilhoEsquerdo(elemento))
