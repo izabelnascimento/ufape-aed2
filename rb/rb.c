@@ -199,9 +199,9 @@ int isFilhoDireito(Arvore elemento)
 }
 
 const char *cores[] = {
-    "VERMELHO",
-    "PRETO",
-    "DUPLO PRETO"};
+    "R",
+    "B",
+    "DP"};
 
 void preOrderRb(Arvore raiz)
 {
